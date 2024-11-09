@@ -3,7 +3,6 @@ import 'package:demozeta/core/usecase/usecase.dart';
 import 'package:demozeta/features/login/domain/entity/login_entity.dart';
 import 'package:demozeta/features/login/domain/repository/login_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'dart:convert';
 
 part 'get_login_usecase.g.dart';
 

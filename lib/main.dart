@@ -1,5 +1,5 @@
+import 'package:demozeta/config/routes/router_provider.dart';
 import 'package:demozeta/features/login/presentation/bloc/login_bloc.dart';
-import 'package:demozeta/features/login/presentation/screens/widgets/login_screen.dart';
 import 'package:demozeta/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,8 +17,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [BlocProvider(create: (_) => getIt<LoginBloc>())],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Flutter Demo',
+        routerConfig: GoRouterProvider.routerProvider,
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -38,7 +39,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: LoginScreen(),
       ),
     );
   }

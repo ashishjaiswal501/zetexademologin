@@ -2,8 +2,8 @@ import 'package:demozeta/features/login/presentation/bloc/login_bloc.dart';
 import 'package:demozeta/features/login/presentation/bloc/login_event.dart';
 import 'package:demozeta/features/login/presentation/bloc/login_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -56,20 +56,27 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-                return ElevatedButton(
-                    onPressed: state is LoginStateLoading
-                        ? null
-                        : () {
-                            if (foromKey.currentState!.validate()) {
-                              foromKey.currentState!.save();
-                              context.read<LoginBloc>().add(GetLoginPressed(
-                                  email: emailcontroller.text,
-                                  password: passwordcontroller.text));
-                            }
-                          },
-                    child: const Text("Login"));
-              })
+              BlocConsumer<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                      onPressed: state is LoginStateLoading
+                          ? null
+                          : () {
+                              if (foromKey.currentState!.validate()) {
+                                foromKey.currentState!.save();
+                                context.read<LoginBloc>().add(GetLoginPressed(
+                                    email: emailcontroller.text,
+                                    password: passwordcontroller.text));
+                              }
+                            },
+                      child: const Text("Login"));
+                },
+                listener: (BuildContext context, LoginState state) {
+                  if (state is LoginStateSuccess) {
+                    context.replaceNamed('home');
+                  }
+                },
+              ),
             ],
           ),
         ),
