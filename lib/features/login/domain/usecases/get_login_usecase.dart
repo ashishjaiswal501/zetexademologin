@@ -12,6 +12,10 @@ class GetLoginUsecase
   GetLoginUsecase(this.loginRepository);
   @override
   Future<DataState<LoginEntity>> call({LoginRequestPrams? prams}) {
+    if (prams == null) {
+      return Future.value(
+          const DataFailed<LoginEntity>('Parameters cannot be null'));
+    }
     return loginRepository.login(prams);
   }
 }

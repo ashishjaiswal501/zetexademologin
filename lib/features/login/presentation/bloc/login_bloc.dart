@@ -1,4 +1,5 @@
 import 'package:demozeta/core/resources/data_state.dart';
+import 'package:demozeta/features/login/domain/entity/login_entity.dart';
 import 'package:demozeta/features/login/domain/usecases/get_login_usecase.dart';
 import 'package:demozeta/features/login/presentation/bloc/login_event.dart';
 import 'package:demozeta/features/login/presentation/bloc/login_state.dart';
@@ -11,14 +12,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void onLogin(GetLoginPressed event, Emitter<LoginState> emit) async {
-    emit(const LoginStateLoading());
-    final dataState = await getLoginUsecase.call(
-        prams: LoginRequestPrams(email: event.email, password: event.password));
+    try {
+      emit(const LoginStateLoading());
+      final dataState = await getLoginUsecase.call(
+          prams:
+              LoginRequestPrams(email: event.email, password: event.password));
 
-    if (dataState is DataSuccess && dataState.data != null) {
-      emit(LoginStateSuccess(dataState.data!));
-    } else if (dataState is DataFailed) {
-      emit(LoginStateError(dataState.dioError!));
+      if (dataState is DataSuccess<LoginEntity> && dataState.data != null) {
+        emit(LoginStateSuccess(dataState.data!));
+      } else if (dataState is DataFailed) {
+        emit(LoginStateError(dataState.dioError!));
+      }
+    } catch (e) {
+      emit(LoginStateError(e.toString()));
     }
   }
 }

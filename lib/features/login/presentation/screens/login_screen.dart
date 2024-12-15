@@ -24,13 +24,15 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
+                key: const Key('emailField'),
                 controller: emailcontroller,
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Please enter email address";
-                  } else {
-                    return null;
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required';
+                  } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    return 'Enter a valid email';
                   }
+                  return null;
                 },
                 onSaved: (newValue) {
                   emailcontroller.text = newValue!;
@@ -40,15 +42,17 @@ class LoginScreen extends StatelessWidget {
                 height: 15,
               ),
               TextFormField(
+                key: const Key('passwordField'),
                 obscureText: true,
                 controller: passwordcontroller,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Please enter password";
-                  } else {
-                    return null;
-                  }
-                },
+                 validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Password is required';
+              } else if (value.length < 6) {
+                return 'Password must be at least 6 characters';
+              }
+              return null;
+            },
                 onSaved: (newValue) {
                   passwordcontroller.text = newValue!;
                 },
@@ -59,6 +63,7 @@ class LoginScreen extends StatelessWidget {
               BlocConsumer<LoginBloc, LoginState>(
                 builder: (context, state) {
                   return ElevatedButton(
+                      key: const Key('loginButton'),
                       onPressed: state is LoginStateLoading
                           ? null
                           : () {
